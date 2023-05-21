@@ -1,4 +1,4 @@
-# WFiAppKotlin
+# WFiAppCompose
 
 App Developed as a learning tool.
 
