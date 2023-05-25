@@ -31,25 +31,26 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.wfiappcompose.R
 import com.example.wfiappcompose.data.DataProvider
 import com.example.wfiappcompose.ui.theme.WFiAppComposeTheme
 
 @Composable
-fun InstituteList(){
+fun InstituteList(onClick: (Int) -> Unit) {
     val data by remember {
         mutableStateOf(DataProvider.institutes.toList())
     }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
-    ){
-        items(data.size){index ->
+    ) {
+        items(data.size) { index ->
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(4.dp)
-                    .clickable { /*TODO*/ },
+                    .padding(4.dp),
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -57,91 +58,12 @@ fun InstituteList(){
                     painter = painterResource(id = data[index].imageResource),
                     contentDescription = data[index].title,
                     title = data[index].title,
-                    info = data[index].info
+                    info = data[index].info,
+                    onClick = onClick,
+                    index = index
                 )
             }
         }
     }
 }
 
-@Composable
-fun ImageCard(
-    painter: Painter,
-    contentDescription: String,
-    title: String,
-    info: String,
-    modifier: Modifier = Modifier
-){
-        Card(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(15.dp)
-                .clickable { },
-            shape = RoundedCornerShape(15.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
-        ) {
-            Box(modifier = Modifier
-                .height(200.dp)
-                .fillMaxWidth()){
-                InstituteImage(painter, contentDescription)
-                Gradient()
-                Text(
-                    text = title,
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(12.dp),
-                    fontSize = 24.sp,
-                    style = TextStyle(color = Color.White)
-                )
-            }
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .height(45.dp)
-            ) {
-                Text(text = info)
-            }
-        }
-}
-
-@Composable
-private fun InstituteImage(
-    painter: Painter,
-    contentDescription: String
-) {
-    Image(
-        painter = painter,
-        contentDescription = contentDescription,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier.fillMaxWidth()
-    )
-}
-
-@Composable
-private fun Gradient() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Transparent,
-                        Color.Black
-                    ),
-                    startY = 450f
-                )
-            )
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ImageCardPreview() {
-    WFiAppComposeTheme {
-        ImageCard(
-            painter = painterResource(id = R.drawable.img_bib),
-            contentDescription = "test",
-            title = "test",
-            info = "info"
-        )
-    }
-}
