@@ -46,25 +46,10 @@ import com.example.wfiappcompose.ui.theme.WFiAppComposeTheme
 
 @Composable
 fun InstituteList(onClick: (Int) -> Unit) {
-    val data by remember {
-        mutableStateOf(DataProvider.institutes.toList())
-    }
+    val data by remember { mutableStateOf(DataProvider.institutes.toList()) }
+    var numOfColumns by remember { mutableStateOf(1) }
 
-    var orientation by remember { mutableStateOf(Configuration.ORIENTATION_PORTRAIT) }
-    val configuration = LocalConfiguration.current
-    var numOfColumns by remember {
-        mutableStateOf(1)
-    }
-
-    LaunchedEffect(configuration) {
-        snapshotFlow { configuration.orientation }
-            .collect { orientation = it }
-    }
-
-    numOfColumns = when (orientation) {
-        Configuration.ORIENTATION_PORTRAIT -> { 1 }
-        else -> { 2 }
-    }
+    numOfColumns = getColumnsFromOrientation()
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(numOfColumns),
@@ -88,6 +73,22 @@ fun InstituteList(onClick: (Int) -> Unit) {
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun getColumnsFromOrientation(): Int {
+    var orientation by remember { mutableStateOf(Configuration.ORIENTATION_PORTRAIT) }
+    val configuration = LocalConfiguration.current
+
+    LaunchedEffect(configuration) {
+        snapshotFlow { configuration.orientation }
+            .collect { orientation = it }
+    }
+
+    return when (orientation) {
+        Configuration.ORIENTATION_PORTRAIT -> { 1 }
+        else -> { 2 }
     }
 }
 
