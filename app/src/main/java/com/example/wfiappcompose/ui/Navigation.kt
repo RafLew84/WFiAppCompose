@@ -1,6 +1,5 @@
 package com.example.wfiappcompose.ui
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
